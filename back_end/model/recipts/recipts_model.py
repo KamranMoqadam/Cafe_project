@@ -2,19 +2,17 @@ from email.policy import default
 from peewee import *
 import back_end.core.db_connection as database_connection
 import back_end.model.recipts.utils as val
-from ..order.oredr_model import orders
+from back_end.model.order.oredr_model import orders
+from back_end.model.users.users_model import Users
 import datetime
 
-class users(Model):
-    id: int
-    
-    
+
 class receipts(Model):
     receipts_id = AutoField()
     order_id = ForeignKeyField(orders, on_delete='CASCADE', on_update='CASCADE', backref='orders')
-    user_id = ForeignKeyField(users, on_delete='CASCADE', on_update='CASCADE', backref='orders')
+    user_id = ForeignKeyField(Users, on_delete='CASCADE', on_update='CASCADE', backref='orders')
     total_price = CharField()
-    final_price = CharField(default=total_price)
+    final_price = CharField()
     receipts_date = TimestampField(default=datetime.datetime.now())
 
     class Meta:
@@ -31,3 +29,7 @@ class receipts(Model):
             val.Validator.validate()
             self.save()
             return 'ok'
+
+
+c = receipts(order_id=orders.get(orders.order_id == 1), user_id=Users.get(Users.user_id == 1), total_price='200000',final_price='200000')
+c.save_receipts()
