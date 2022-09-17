@@ -1,21 +1,5 @@
 from back_end.core.db_connection import db_conn
-import datetime
-
 from peewee import *
-# from ..users.users_model import users_model
-
-
-
-class users(Model):
-    id: int
-
-
-class tables(Model):
-    id: int
-
-
-class item(Model):
-    id: int
 
 
 class Users(Model):
@@ -37,7 +21,7 @@ class Users(Model):
             if not self.table_exists():
                 db_conn.db.create_tables([self])
 
-            # val.Validator.valid_order = self
+            # val.Validator.valid_users = self
             # val.Validator.validate()
             self.save()
             return 'user created!'
