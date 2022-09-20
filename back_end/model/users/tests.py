@@ -1,6 +1,10 @@
 import unittest
 from users_model import Users
 
+"""
+Applying Users attributes test
+"""
+
 
 class UsersTest(unittest.TestCase):
     def setUp(self) -> None:
