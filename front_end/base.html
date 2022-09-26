@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{% block title %}{% endblock %}</title>
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+
+    <script
+            src="https://kit.fontawesome.com/53c82546d4.js"
+            crossorigin="anonymous"
+    ></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <ul class="list-unstyled row d-md-flex mb-0">
+                <li class="col-12 col-md-4">
+                    <a href="tel:+989121234567">
+                        <i class="fas fa-phone-volume" aria-hidden="false"></i> +989121234567</a>
+                </li>
+
+                <li class="col-8 col-md-4">
+                    <a href="mailto:info@shishcafe.com">
+                        <i class="far fa-envelope-open"></i> info@shishcafe.com</a>
+                </li>
+
+                <li class="ml-auto col-3 col-md-4 text-right">
+                    <a href="#"> EN </a>
+                    <a>|</a>
+                    <a href="#"> FA </a>
+                </li>
+            </ul>
+        </div>
+
+    </header>
+	{% block content %}{% endblock %}
+<footer>
+
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+
+</body>
+</html>
