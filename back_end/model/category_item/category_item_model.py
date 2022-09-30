@@ -23,5 +23,5 @@ class Category_item(Model):
             self.save()
             return 'ok'
 
-cat = Category_item(category_id=Category.get(Category.category_id==1),menu_item_id=Menu_Item.get(Menu_Item.menu_id==1))
-cat.save_category_item()
+
+

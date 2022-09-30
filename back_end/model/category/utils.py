@@ -1,5 +1,5 @@
 import category_model
-from back_end.log.log import cafe_log
+from back_end.models import cafe_log
 
 
 class Validator:

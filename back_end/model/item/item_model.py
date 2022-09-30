@@ -1,6 +1,7 @@
 import datetime
 from peewee import *
 import back_end.core.db_connection as database_connection
+from back_end.model.item.utils import Validator
 
 
 class Menu_Item(Model):
@@ -21,9 +22,8 @@ class Menu_Item(Model):
             if not self.table_exists():
                 database_connection.db_conn.db.create_tables([self])
 
-            # val.Validator.valid_item = self
-            # val.Validator.validate()
+            Validator.valid_item = self
+            Validator.validate()
             self.save()
             return 'ok'
-
 

@@ -1,11 +1,11 @@
 import unittest
-import item_model
+from back_end.model.item.item_model import  Menu_Item
 
 
 class TestItem(unittest.TestCase):
     def setUp(self) -> None:
-        self._Item = item_model.Item(menu_id=1, item_name="pizza", price=1, category="lunch", discount=0,
-                                     serving_time=None, cooking_time=None,category_id=1)
+        self._Item = Menu_Item(menu_id=1, item_name="pizza", price=1, category="lunch", discount=0,
+                                     serving_time=None, cooking_time=None, category_id=1)
 
     def test_init(self):
         self.assertEqual(self._Item.menu_id, 1)
