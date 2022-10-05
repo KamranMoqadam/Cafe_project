@@ -1,3 +1,8 @@
 from flask import Flask
+from back_end.core.utils import Router
+from url import routes
+app = Flask(__name__)
+router = Router(app, routes)
 
-app=Flask(__name__)
+if __name__ == "__main__":
+    app.run(debug=True)
