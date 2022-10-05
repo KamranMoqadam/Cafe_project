@@ -1,9 +1,9 @@
-import item_model
+
 from back_end.model.log import cafe_log
 
 
 class Validator:
-    valid_item: item_model.Item
+    valid_item:any
 
     @staticmethod
     def validate():
@@ -16,6 +16,6 @@ class Validator:
         if isinstance(Validator.valid_item.category, str):
             cafe_log.error("invalid category")
             raise ValueError("invalid category")
-        if isinstance(Validator.valid_item.menu_id, item_model.Item):
-            cafe_log.error("invalid menu id")
-            raise ValueError("invalid menu id")
+        # if isinstance(Validator.valid_item.menu_id, Menu_Item):
+        #     cafe_log.error("invalid menu id")
+        #     raise ValueError("invalid menu id")
