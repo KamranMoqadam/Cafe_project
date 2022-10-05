@@ -5,7 +5,7 @@ import back_end.core.db_connection as database_connection
 class Category(Model):
     category_id = AutoField()
     category_name = CharField(max_length=255, unique=True)
-    meal = CharField(max_length=255, unique=True)
+    meal = CharField(max_length=255)
 
     class Meta:
         database = database_connection.db_conn.db
@@ -20,5 +20,6 @@ class Category(Model):
             # val.Validator.validate()
             self.save()
             return 'ok'
+
 
 
