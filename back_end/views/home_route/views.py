@@ -1,15 +1,23 @@
+import functools
 import json
 
 from back_end.model.category.category_model import Category
 from flask import render_template, request, jsonify
 from back_end.model.item.item_model import Menu_Item
 from back_end.model.category_item.category_item_model import Category_item
-
+from back_end.model.users.users_model import Users
+from flask import (
+    Blueprint, flash, g, redirect, render_template, request, session, url_for
+)
 
 def home():
     categorys = Category.select()
-
-    return render_template('main.html', categorys=categorys)
+    user = None
+    try:
+     user = Users.get(Users.user_id == session['user_id'])
+    except KeyError:
+      pass
+    return render_template('main.html', categorys=categorys, user=user)
 
 
 def get_items(cat_id):
@@ -18,7 +26,4 @@ def get_items(cat_id):
     lst = []
     for q in items:
         lst.append(q)
-    print(lst)
     return render_template('items.html', items=items)
-
-
