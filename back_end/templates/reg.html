@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatiblehttps://codepen.io/cristinaconacel/pen/qQKzBV" content="ie=edge">
+    <link rel="stylesheet" type="text/css"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://codepen.io/skjha5993/pen/bXqWpR.css">
+    <title>Registration</title>
+    <style>
+        label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        body {
+            background: whitesmoke;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="main" class="container">
+        <form id="reg_form" action="./form.py" method="get">
+            <h2 class="text-center">Join Our Cafe</h2>
+            <div class="row jumbotron">
+                <div class="col-sm-6 form-group">
+                    <label for="name-f">First Name</label>
+                    <input type="text" class="form-control" name="fname" id="first_name"
+                        placeholder="Enter your first name." required>
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label for="name-l">Last name</label>
+                    <input type="text" class="form-control" name="lname" id="last_name" placeholder="Enter your last name."
+                        required>
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" name="email" id="email" placeholder="Enter your email."
+                        required>
+                </div>
+
+                <div class="col-sm-6 form-group">
+                    <label for="tel">Phone</label>
+                    <input type="tel" name="phone" class="form-control" id="number"
+                        placeholder="Enter Your Contact Number." required>
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label for="address">Address</label>
+                    <input type="tel" name="address" class="form-control" id="address"
+                        placeholder="Enter Your Contact Address." required>
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label for="pass">Password</label>
+                    <input type="Password" name="password" class="form-control" id="password"
+                        placeholder="Enter your password." required>
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label for="pass2">Confirm Password</label>
+                    <input type="Password" name="cnf_password" class="form-control" id="config_password"
+                        placeholder="Re-enter your password." required>
+                </div>
+                <div class="col-sm-12">
+                    <input type="checkbox" class="form-check d-inline" id="chb" required><label for="chb"
+                        class="form-check-label">&nbsp;I accept all terms and conditions.
+                    </label>
+                </div>
+
+                <div class="col-sm-12 form-group mb-0">
+                    <button type="submit" class="btn btn-primary float-right">Submit</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+<script>
+    const form = document.getElementById('reg_form')
+         form.addEventListener('submit',async function postdata(e){
+             e.preventDefault();
+             const payload = new FormData(form);
+             const response =  await fetch('http://127.0.0.1:5000/reg',{method:'POST',body:payload});
+             if (response.status===200){
+                 if(document.getElementById('email_wrong')){
+                     document.getElementById('email_wrong').remove();
+
+                 }
+                  const div = document.createElement('button');
+                 div.className="btn btn-primary mb-2";
+                 div.type = 'button';
+                 div.disabled=true;
+                 const span = document.createElement('span');
+                 span.role='status';
+                 span.className="spinner-border spinner-border-sm";
+                 const b = document.createElement('b');
+                 b.textContent = " Successes,going to main page"
+                 div.append(span);
+                 div.append(b)
+                 document.getElementById('main').append(div);
+                 setTimeout(function (){location.href=response.url},1500)
+                }
+             else {
+                 if(document.getElementById('email_wrong')){
+                     document.getElementById('email_wrong').remove();
+
+                 }
+                 const json = await response.json();
+                 const div = document.createElement('div');
+                 div.className="alert alert-danger  text-center";
+                 div.role = 'alert';
+                 div.id='email_wrong';
+                 div.textContent = json.message;
+                 document.getElementById('main').append(div);
+             }})
+</script>
+</body>
+
+</html>
