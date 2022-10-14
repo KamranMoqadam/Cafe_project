@@ -71,9 +71,13 @@
         </div>
       </li> -->
       <!-- <li class="nav-item"><a href="" class="nav-link font-weight-bold text-uppercase">About</a></li> -->
-        <li class="nav-item"><a href="" data-toggle="modal" data-target="#cartModal" data-bs-toggle="collapse" data-bs-target="#navbarNav" class="nav-link font-weight-bold text-uppercase">Shop Card</a></li>
+            {% if user %}
+      <li class="nav-item"><a href="/my_orders/{{user.user_id}}" class="nav-link font-weight-bold text-uppercase">My orders</a></li>
+      {% endif %}
+        <li class="nav-item"><a href="" data-toggle="modal" data-target="#cartModal" data-bs-toggle="collapse" data-bs-target="#navbarNav" onclick="get_card('get')" class="nav-link font-weight-bold text-uppercase">Shop Card</a></li>
       <li class="nav-item"><a href={% if user %}  "/logout" {% else %} "/reg" {% endif %} class="nav-link font-weight-bold text-uppercase" name="log">{% if user %}  logout {% else %} Log in/Sign up {% endif %}</a></li>
       <li class="nav-item"><a href="" class="nav-link font-weight-bold text-uppercase">Contact</a></li>
+      <li class="nav-item"><a href="/" class="nav-link font-weight-bold text-uppercase">Home</a></li>
 
       <!-- <li class="nav-item"><i style="font-size:24px" class="fa">&#xf07a;</i></li> -->
     </ul>
@@ -110,12 +114,12 @@
           </tbody>
         </table>
         <div class="d-flex justify-content-end">
-          <h5 id="total" > Total: <span class="price text-success"></span></h5>
+          <h5  > Total: <span  id="total" class="price text-success">0</span></h5>
         </div>
       </div>
-      <div class="modal-footer border-top-0 d-flex justify-content-between">
+      <div id="load" class="modal-footer border-top-0 d-flex justify-content-between">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success">Checkout</button>
+        <button type="button" onclick="get_card('check')" class="btn btn-success">Checkout</button>
       </div>
     </div>
   </div>
@@ -137,7 +141,61 @@
 <script src='https://code.jquery.com/jquery-3.3.1.slim.min.js'></script>
 <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js'></script>
 <script  src="script.js"></script>
+<script>
+  async function get_card(type){
+    let cards = {}
+    for (const i of Object.keys(sessionStorage)){
+      if(i.indexOf('it-')>-1){
+        cards[i]=sessionStorage.getItem(i)
+      }
+    }
 
+    if(Object.keys(cards).length>0 & type==='get'){
+    const res = await fetch('http://127.0.0.1:5000/shop_card',{method:'POST',headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },body:JSON.stringify(cards)});
+      const res_body = await res.text()
+      console.log(res_body)
+      document.getElementById('shop-body').innerHTML= res_body;
+      const total_item = document.getElementsByClassName('item_total')
+      let num = 0
+      for (const i of total_item){
+        num += Number(i.innerHTML)
+      }
+      document.getElementById('total').innerHTML = num.toString()
+    } else if(Object.keys(cards).length>0 & type==='check'){
+         const div = document.createElement('button');
+         div.className="btn btn-primary mb-2";
+         div.type = 'button';
+         div.disabled=true;
+         div.id ='successes'
+         const span = document.createElement('span');
+         span.role='status';
+         span.className="spinner-border spinner-border-sm";
+         div.append(span);
+         document.getElementById('load').append(div)
+          const res = await fetch('http://127.0.0.1:5000/check_out',{method:'POST',headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },body:JSON.stringify(cards)});
+      if (res.status===200){
+          // for (const i of document.getElementById('shop-body').children){
+          //     if(document.getElementById('it-'+i.id.split('-')[1])){
+          //   document.getElementById('it-'+i.id.split('-')[1]).innerText='0';}
+          //    i.remove();
+          //
+          // }
+          const b = document.createElement('b');
+          b.textContent = " Successes"
+          document.getElementById('successes').append(b)
+          sessionStorage.clear();
+          setTimeout(function (){location.href='/'; document.getElementById('successes').remove();},1500)
+      }
+    }
+
+  }
+</script>
 </body>
 
 </html>
