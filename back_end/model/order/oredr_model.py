@@ -11,26 +11,27 @@ from back_end.model.item.item_model import Menu_Item
 class orders(Model):
     order_id = AutoField()
     user_id = ForeignKeyField(Users, on_delete='CASCADE', on_update='CASCADE', backref='orders')
-    table_id = ForeignKeyField(tables, on_delete='CASCADE', on_update='CASCADE', backref='tables')
+    table_id = ForeignKeyField(tables, on_delete='CASCADE', on_update='CASCADE', backref='tables', null=True)
     item_id = ForeignKeyField(Menu_Item, on_delete='CASCADE', on_update='CASCADE', backref='items')
-    number = IntegerField(unique=True)
+    number = CharField()
+    count = IntegerField()
     status = CharField()
     takeaway = BooleanField()
+    ready_time = TimestampField()
     order_date = TimestampField(default=datetime.datetime.now())
 
     class Meta:
         database = database_connection.db_conn.db
         db_table = 'orders'
 
-    def save_orders(self):
+    @staticmethod
+    def save_orders(data):
         with database_connection.db_conn.db:
-            if not self.table_exists():
-                database_connection.db_conn.db.create_tables([self])
+            if not orders.table_exists():
+                database_connection.db_conn.db.create_tables([orders])
 
-            Validator.valid_order = self
-            Validator.validate()
-            self.save()
+            # Validator.valid_order = orders
+            # Validator.validate()
+
+            orders.insert_many(data).execute()
             return 'ok'
-
-
-
