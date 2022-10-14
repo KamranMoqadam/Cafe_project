@@ -41,6 +41,8 @@
     function click_item(){
         const item = document.getElementById('category').children
         item[Math.floor(Math.random() * item.length)].click()
+        console.log(Object.keys(sessionStorage).length)
+
     }
     async function get_items(cat_id) {
         const response = await fetch('http://127.0.0.1:5000/get_items/'+cat_id);
@@ -51,53 +53,50 @@
         document.getElementById('cat-'+cat_id).style.background='green';
         if(response.status===200){
             document.getElementById('items').innerHTML = items;
+            for (const i of Object.keys(sessionStorage)){
+            console.log(sessionStorage.getItem(i))
+            if(document.getElementById(i)){
+            document.getElementById(i.toString()).innerHTML = sessionStorage.getItem(i)}
+        }
         }
 
     }
   function increase(id,item){
-        console.log(item);
+
         const el = document.getElementById('it-'+id);
         el.innerHTML =String( Number(el.innerText)+1);
-        const shop_body = document.getElementById('shop-body')
-        const tr = document.createElement('tr')
-        const td1 = document.createElement('td')
-        const img = document.createElement('img')
-        img.src = "{{ url_for('static',filename='cofee.jpg') }}"
-        img.className = "img-fluid img-thumbnail"
-        img.alt = "Sheep"
-        td1.append(img);
-        const td2 = document.createElement('td')
-        td2.innerText = item.item_name
-        const td3 = document.createElement('td')
-        td3.innerText = item.price
-        const td4 = document.createElement('td')
-        const inp = document.createElement('input')
-        inp.type = "number"
-        inp.className = "form-control"
-        inp.id ='inp'+item.menu_id
-        inp.min = 1;
-        // inp.oninput = function (){....}
-        const num = document.getElementById('it-'+item.menu_id).innerText;
-        inp.value =  num
-        td4.append(inp)
-        const td5 = document.createElement('td')
-        td5.innerText = String(Number(num)*Number(item.price))
-        const td6 = document.createElement('td')
-        const a = document.createElement('a')
-        a.href = '#'
-        a.className = "btn btn-danger btn-sm"
-        const i = document.createElement('i')
-        i.className = "fa fa-times"
-        a.append(i)
-        td6.append(a)
-        tr.append(td1,td2,td3,td4,td5,td6)
-        shop_body.append(tr)
+        sessionStorage.setItem(el.id,el.innerHTML)
+        console.log(sessionStorage)
+       const total = document.getElementById('total').innerText
+       document.getElementById('total').innerText = (Number(total)+Number(item.price)).toString()
   }
-  function decrease(id){
+  function decrease(id,price){
         const el = document.getElementById('it-'+id);
         if(Number(el.innerText)>0){
-        el.innerHTML =String( Number(el.innerText)-1);}
-  }
+        el.innerHTML =String( Number(el.innerText)-1);
+        document.getElementById('total').innerText = (Number(document.getElementById('total').innerText)-Number(price)).toString()
+        if(el.innerText==0){
+             sessionStorage.removeItem('it-'+id);
+        }else {
+        sessionStorage.setItem(el.id,el.innerHTML)}
+        }
+        console.log(sessionStorage)
+     }
+   function change_num(id,price){
+        const old_total = Number(document.getElementById('total').innerText)-Number(document.getElementById('total-'+id).innerText)
+        const new_total = (Number(document.getElementById('inp'+id).value)*Number(price))
+        document.getElementById('total-'+id).innerText = new_total.toString()
+       document.getElementById('it-'+id).innerText = document.getElementById('inp'+id).value
+       document.getElementById('total').innerText = (old_total+new_total).toString()
+       sessionStorage.setItem('it-'+id,document.getElementById('inp'+id).value)
+   }
+   function remove_item(id){
+        document.getElementById('total').innerHTML = (Number(document.getElementById('total').innerText)-Number(document.getElementById('total-'+id).innerText)).toString()
+        document.getElementById('tr-'+id).remove();
+        sessionStorage.removeItem('it-'+id);
+        document.getElementById('it-'+id).innerHTML=0;
+   }
+
 </script>
 
 </body>
